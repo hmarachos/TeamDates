@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="content-panel form-panel">
+    <h1 class="h4 mb-3">{{ title }}</h1>
+    <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {% include "partials/form_errors.html" %}
+        <div class="row g-3">
+            <div class="col-md-6">{{ form.company_name.label(class="form-label") }}{{ form.company_name(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.full_name.label(class="form-label") }}{{ form.full_name(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.position.label(class="form-label") }}{{ form.position(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.department.label(class="form-label") }}{{ form.department(class="form-control") }}</div>
+            <div class="col-md-4">{{ form.birth_date.label(class="form-label") }}{{ form.birth_date(class="form-control") }}</div>
+            <div class="col-12">{{ form.notes.label(class="form-label") }}{{ form.notes(class="form-control", rows=4) }}</div>
+        </div>
+        <div class="mt-4 d-flex gap-2">
+            {{ form.submit(class="btn btn-primary") }}
+            <a class="btn btn-outline-secondary" href="{{ url_for('employees.index') }}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

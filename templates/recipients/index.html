@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Получатели{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap gap-2 justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Получатели уведомлений</h1>
+    <a href="{{ url_for('recipients.create') }}" class="btn btn-primary">Добавить</a>
+</div>
+<form class="content-panel mb-3" method="get">
+    <div class="row g-2">
+        <div class="col-md-9"><input class="form-control" name="search" placeholder="Поиск по имени или email" value="{{ request.args.get('search', '') }}"></div>
+        <div class="col-md-3"><button class="btn btn-secondary w-100" type="submit">Найти</button></div>
+    </div>
+</form>
+<section class="content-panel mb-3">
+    <h2 class="h5 mb-3">Тестовая отправка</h2>
+    <form class="row g-2" method="post" action="{{ url_for('recipients.test_email') }}">
+        {{ test_form.hidden_tag() }}
+        <div class="col-md-9">{{ test_form.email(class="form-control", placeholder="email@example.com") }}</div>
+        <div class="col-md-3">{{ test_form.submit(class="btn btn-outline-primary w-100") }}</div>
+    </form>
+</section>
+<section class="content-panel">
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+            <tr>
+                <th>Имя</th>
+                <th>Email</th>
+                <th>Статус</th>
+                <th class="text-end">Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for recipient in pagination.items %}
+                <tr>
+                    <td>{{ recipient.name }}</td>
+                    <td class="fw-semibold">{{ recipient.email }}</td>
+                    <td>
+                        {% if recipient.is_active %}
+                            <span class="badge text-bg-success">Активен</span>
+                        {% else %}
+                            <span class="badge text-bg-secondary">Отключен</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">
+                        <form class="d-inline" method="post" action="{{ url_for('recipients.toggle', recipient_id=recipient.id) }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <button class="btn btn-sm btn-outline-secondary" type="submit">{{ "Отключить" if recipient.is_active else "Включить" }}</button>
+                        </form>
+                        <a class="btn btn-sm btn-outline-primary" href="{{ url_for('recipients.edit', recipient_id=recipient.id) }}">Изменить</a>
+                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteRecipient{{ recipient.id }}">Удалить</button>
+                    </td>
+                </tr>
+                <div class="modal fade" id="deleteRecipient{{ recipient.id }}" tabindex="-1">
+                    <div class="modal-dialog"><div class="modal-content">
+                        <div class="modal-header"><h5 class="modal-title">Удалить получателя</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                        <div class="modal-body">Удалить получателя {{ recipient.email }}?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+                            <form method="post" action="{{ url_for('recipients.delete', recipient_id=recipient.id) }}">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-danger" type="submit">Удалить</button>
+                            </form>
+                        </div>
+                    </div></div>
+                </div>
+            {% else %}
+                <tr><td colspan="4" class="text-center text-muted py-4">Получатели не найдены.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "partials/pagination.html" %}
+</section>
+{% endblock %}
+

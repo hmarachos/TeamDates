@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<body style="font-family: Arial, sans-serif; color:#1f2937; background:#fff7ed; padding:16px;">
+<div style="background:#ffffff;border:1px solid #fed7aa;padding:18px;">
+    <h2 style="color:#c2410c;text-align:center;">Поздравляем именинников!</h2>
+    <p style="font-size:16px;">Сегодня особенный день для наших коллег. Желаем крепкого здоровья, энергии, профессиональных успехов и хорошего настроения.</p>
+    <table width="100%" cellpadding="8" cellspacing="0" border="1" style="border-collapse:collapse;border-color:#fdba74;background:#ffffff;">
+        <thead>
+        <tr style="background:#ea580c;color:#ffffff;">
+            <th align="left">Наименование предприятия</th>
+            <th align="left">ФИО</th>
+            <th align="left">Должность</th>
+            <th align="left">Дата рождения</th>
+            <th align="left">Возраст</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.employee.company_name }}</td>
+            <td><strong>{{ row.employee.full_name }}</strong></td>
+            <td>{{ row.employee.position }}</td>
+            <td>{{ row.employee.birth_date.strftime('%d.%m.%Y') }}</td>
+            <td><strong style="color:#c2410c;">{{ row.age }}</strong></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <p style="color:#6b7280;margin-top:16px;">Автоматическая система информирования о днях рождения сотрудников.</p>
+</div>
+</body>
+</html>
+

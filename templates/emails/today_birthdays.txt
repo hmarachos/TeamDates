@@ -1,0 +1,11 @@
+{{ subject }}
+
+Поздравляем именинников!
+Сегодня особенный день для наших коллег. Желаем крепкого здоровья, энергии, профессиональных успехов и хорошего настроения.
+
+{% for row in rows -%}
+{{ row.employee.company_name }} | {{ row.employee.full_name }} | {{ row.employee.position }} | {{ row.employee.birth_date.strftime('%d.%m.%Y') }} | {{ row.age }}
+{% endfor %}
+
+Автоматическая система информирования о днях рождения сотрудников.
+

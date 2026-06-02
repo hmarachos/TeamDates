@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<body style="font-family: Arial, sans-serif; color:#1f2937;">
+<h2 style="color:#1f4e79;">{{ subject }}</h2>
+<p>Период: <strong>{{ period }}</strong></p>
+<p>Количество именинников: <strong>{{ rows|length }}</strong></p>
+<table width="100%" cellpadding="8" cellspacing="0" border="1" style="border-collapse:collapse;border-color:#d1d5db;">
+    <thead>
+    <tr style="background:#1f4e79;color:#ffffff;">
+        <th align="left">Наименование предприятия</th>
+        <th align="left">ФИО</th>
+        <th align="left">Должность</th>
+        <th align="left">Дата рождения</th>
+        <th align="left">Возраст</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for row in rows %}
+    <tr>
+        <td>{{ row.employee.company_name }}</td>
+        <td>{{ row.employee.full_name }}</td>
+        <td>{{ row.employee.position }}</td>
+        <td>{{ row.employee.birth_date.strftime('%d.%m.%Y') }}</td>
+        <td>{{ row.age }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<p style="margin-top:16px;color:#6b7280;">Дата формирования: {{ generated_at.strftime('%d.%m.%Y %H:%M') }}</p>
+<p style="color:#6b7280;">Автоматическая система информирования о днях рождения сотрудников.</p>
+</body>
+</html>
+

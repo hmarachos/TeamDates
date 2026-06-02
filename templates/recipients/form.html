@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<div class="content-panel form-panel">
+    <h1 class="h4 mb-3">{{ title }}</h1>
+    <form method="post" novalidate>
+        {{ form.hidden_tag() }}
+        {% include "partials/form_errors.html" %}
+        <div class="mb-3">{{ form.name.label(class="form-label") }}{{ form.name(class="form-control") }}</div>
+        <div class="mb-3">{{ form.email.label(class="form-label") }}{{ form.email(class="form-control") }}</div>
+        <div class="form-check mb-3">{{ form.is_active(class="form-check-input") }}{{ form.is_active.label(class="form-check-label") }}</div>
+        <div class="d-flex gap-2">
+            {{ form.submit(class="btn btn-primary") }}
+            <a class="btn btn-outline-secondary" href="{{ url_for('recipients.index') }}">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
+

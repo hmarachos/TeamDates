@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Импорт Excel{% endblock %}
+{% block content %}
+<div class="content-panel form-panel">
+    <h1 class="h4 mb-3">Импорт сотрудников из Excel</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {% include "partials/form_errors.html" %}
+        <div class="mb-3">{{ form.file.label(class="form-label") }}{{ form.file(class="form-control") }}</div>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+    {% if result %}
+        <hr>
+        <p class="mb-2">Импортировано: <strong>{{ result.imported }}</strong>. Пропущено: <strong>{{ result.skipped }}</strong>.</p>
+        {% if result.errors %}
+            <ul class="small text-danger">
+                {% for error in result.errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

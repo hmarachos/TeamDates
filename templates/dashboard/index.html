@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Dashboard</h1>
+    <a href="{{ url_for('excel.export_employees') }}" class="btn btn-success">Экспорт в Excel</a>
+</div>
+<div class="row g-3 mb-4">
+    <div class="col-12 col-md-3"><div class="metric-card"><span>Всего сотрудников</span><strong>{{ data.employees_count }}</strong></div></div>
+    <div class="col-12 col-md-3"><div class="metric-card"><span>Всего предприятий</span><strong>{{ data.companies_count }}</strong></div></div>
+    <div class="col-12 col-md-3"><div class="metric-card"><span>Активных получателей</span><strong>{{ data.active_recipients_count }}</strong></div></div>
+    <div class="col-12 col-md-3"><div class="metric-card"><span>Ближайших дней рождения</span><strong>{{ data.upcoming_count }}</strong></div></div>
+</div>
+<section class="content-panel">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="h5 mb-0">Ближайшие дни рождения за 30 дней</h2>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+            <tr>
+                <th>Предприятие</th>
+                <th>ФИО</th>
+                <th>Должность</th>
+                <th>Дата рождения</th>
+                <th>Исполнится</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for item in data.upcoming_birthdays %}
+                <tr class="{% if item.days_left <= 7 %}table-warning{% endif %}">
+                    <td>{{ item.employee.company_name }}</td>
+                    <td class="fw-semibold">{{ item.employee.full_name }}</td>
+                    <td>{{ item.employee.position }}</td>
+                    <td>{{ item.employee.birth_date.strftime('%d.%m.%Y') }}</td>
+                    <td><span class="badge text-bg-primary">{{ item.next_age }}</span></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="5" class="text-center text-muted py-4">Нет ближайших дней рождения.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+

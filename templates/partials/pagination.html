@@ -1,0 +1,23 @@
+{% if pagination.pages > 1 %}
+{% set args = request.args.to_dict(flat=True) %}
+{% set _ = args.pop('page', None) %}
+<nav class="mt-3">
+    <ul class="pagination mb-0">
+        <li class="page-item {% if not pagination.has_prev %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(request.endpoint, page=pagination.prev_num, **args) }}">Назад</a>
+        </li>
+        {% for page in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+            {% if page %}
+                <li class="page-item {% if page == pagination.page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for(request.endpoint, page=page, **args) }}">{{ page }}</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            {% endif %}
+        {% endfor %}
+        <li class="page-item {% if not pagination.has_next %}disabled{% endif %}">
+            <a class="page-link" href="{{ url_for(request.endpoint, page=pagination.next_num, **args) }}">Вперед</a>
+        </li>
+    </ul>
+</nav>
+{% endif %}
