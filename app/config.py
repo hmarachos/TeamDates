@@ -47,4 +47,3 @@ class TestConfig(Config):
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
     SCHEDULER_ENABLED = False
-

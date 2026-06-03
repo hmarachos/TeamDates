@@ -39,8 +39,29 @@ class MailService:
         self.recipient_service = recipient_service or RecipientService()
         self.log_repository = log_repository or EmailLogRepository()
 
+    def _has_sent_notification_today(self, notification_type: NotificationType, reference_date: date | None = None) -> bool:
+        """Проверяет, было ли уведомление этого типа отправлено сегодня."""
+        today = reference_date or date.today()
+        today_start = datetime.combine(today, datetime.min.time())
+        today_end = datetime.combine(today, datetime.max.time())
+        
+        existing = EmailNotificationLog.query.filter(
+            EmailNotificationLog.notification_type == notification_type.value,
+            EmailNotificationLog.sent_at >= today_start,
+            EmailNotificationLog.sent_at <= today_end,
+            EmailNotificationLog.status == NotificationStatus.SUCCESS.value
+        ).first()
+        
+        return existing is not None
+
     def send_next_month_birthdays(self, reference_date: date | None = None) -> int:
         today = reference_date or date.today()
+        
+        # Проверка на дублирование
+        if self._has_sent_notification_today(NotificationType.NEXT_MONTH_BIRTHDAYS, today):
+            current_app.logger.info("Уведомление о днях рождения следующего месяца уже было отправлено сегодня.")
+            return 0
+        
         rows = self.employee_service.next_month_birthdays(today)
         if not rows:
             current_app.logger.info("Нет дней рождения в следующем месяце.")
@@ -71,7 +92,14 @@ class MailService:
         )
 
     def send_today_birthdays(self, reference_date: date | None = None) -> int:
-        rows = self.employee_service.today_birthdays(reference_date or date.today())
+        today = reference_date or date.today()
+        
+        # Проверка на дублирование
+        if self._has_sent_notification_today(NotificationType.TODAY_BIRTHDAY, today):
+            current_app.logger.info("Уведомление о днях рождения сегодня уже было отправлено сегодня.")
+            return 0
+        
+        rows = self.employee_service.today_birthdays(today)
         if not rows:
             current_app.logger.info("Сегодня нет дней рождения сотрудников.")
             return 0
@@ -172,4 +200,3 @@ class MailService:
                 error_message=error_message,
             )
         )
-

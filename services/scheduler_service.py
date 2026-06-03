@@ -10,6 +10,7 @@ class SchedulerService:
     def __init__(self, app) -> None:
         self.app = app
         self.scheduler = BackgroundScheduler(timezone="Europe/Minsk")
+        self.job_id = "next_month_birthdays"
 
     def register_jobs(self) -> None:
         self.scheduler.add_job(
@@ -19,9 +20,10 @@ class SchedulerService:
                 hour=self.app.config["MONTHLY_NOTIFICATION_HOUR"],
                 minute=0,
             ),
-            id="next_month_birthdays",
+            id=self.job_id,
             replace_existing=True,
             max_instances=1,
+            coalesce=True,
         )
         self.scheduler.add_job(
             self._run_today_notification,
@@ -32,6 +34,7 @@ class SchedulerService:
             id="today_birthdays",
             replace_existing=True,
             max_instances=1,
+            coalesce=True,
         )
 
     def start(self) -> None:
