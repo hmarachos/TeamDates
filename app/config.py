@@ -33,8 +33,8 @@ class Config:
     MAIL_FROM = os.getenv("MAIL_FROM", "birthday-reminder@example.local")
 
     MONTHLY_NOTIFICATION_DAY = int(os.getenv("MONTHLY_NOTIFICATION_DAY", "25"))
-    MONTHLY_NOTIFICATION_HOUR = int(os.getenv("MONTHLY_NOTIFICATION_HOUR", "9"))
-    DAILY_NOTIFICATION_HOUR = int(os.getenv("DAILY_NOTIFICATION_HOUR", "9"))
+    MONTHLY_NOTIFICATION_HOUR = int(os.getenv("MONTHLY_NOTIFICATION_HOUR", "8"))
+    DAILY_NOTIFICATION_HOUR = int(os.getenv("DAILY_NOTIFICATION_HOUR", "8"))
 
     ADMIN_USERNAME = os.getenv("ADMIN_USERNAME", "admin")
     ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "change_me_now")

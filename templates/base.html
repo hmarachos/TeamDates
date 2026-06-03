@@ -7,7 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/app.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 {% if current_user.is_authenticated %}
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
@@ -22,15 +22,133 @@
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('recipients.index') }}">Получатели</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('excel.import_employees') }}">Импорт</a></li>
             </ul>
-            <form method="post" action="{{ url_for('auth.logout') }}">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                <button class="btn btn-outline-light btn-sm" type="submit">Выйти</button>
-            </form>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#helpModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-question-circle" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+                    </svg>
+                    Справка
+                </button>
+                <form method="post" action="{{ url_for('auth.logout') }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button class="btn btn-outline-light btn-sm" type="submit">Выйти</button>
+                </form>
+            </div>
         </div>
     </div>
 </nav>
+
+<!-- Модальное окно справки -->
+<div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="helpModalLabel">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-info-circle me-2" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                        <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+                    </svg>
+                    Справка по работе с системой
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <div class="help-section">
+                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-speedometer2 me-2" viewBox="0 0 16 16">
+                            <path d="M8 4a.5.5 0 0 1 .5.5V6a.5.5 0 0 1-1 0V4.5A.5.5 0 0 1 8 4zM3.732 5.732a.5.5 0 0 1 .707 0l.915.914a.5.5 0 1 1-.708.708l-.914-.915a.5.5 0 0 1 0-.707zM2 10a.5.5 0 0 1 .5-.5h1.586a.5.5 0 0 1 0 1H2.5A.5.5 0 0 1 2 10zm9.5 0a.5.5 0 0 1 .5-.5h1.5a.5.5 0 0 1 0 1H12a.5.5 0 0 1-.5-.5zm.754-4.246a.382.382 0 0 0-.527-.02L7.547 9.31a.91.91 0 1 0 1.302 1.258l3.434-4.297a.382.382 0 0 0-.029-.518z"/>
+                            <path fill-rule="evenodd" d="M0 10a8 8 0 1 1 15.547 2.661c-.442 1.253-1.845 1.602-2.932 1.25C11.309 13.488 9.475 13 8 13c-1.474 0-3.31.488-4.615.911-1.087.352-2.49.003-2.932-1.25A7.988 7.988 0 0 1 0 10zm8-7a7 7 0 0 0-6.603 9.329c.203.575.923.876 1.68.63C4.397 12.533 6.358 12 8 12s3.604.532 4.923.96c.757.245 1.477-.056 1.68-.631A7 7 0 0 0 8 3z"/>
+                        </svg>
+                        Dashboard — Главная панель
+                    </h6>
+                    <p>На главной странице отображается обзорная информация о днях рождения сотрудников:</p>
+                    <ul class="mb-0">
+                        <li><strong>Сегодня</strong> — список сотрудников, у которых день рождения сегодня</li>
+                        <li><strong>Ближайшие</strong> — сотрудники с днями рождения в ближайшие 7 дней</li>
+                        <li><strong>В этом месяце</strong> — все именинники текущего месяца</li>
+                    </ul>
+                </div>
+
+                <div class="help-section mt-4">
+                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-people me-2" viewBox="0 0 16 16">
+                            <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1h8zm-7.978-1A.261.261 0 0 1 7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002a.274.274 0 0 1-.014.002H7.022zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM6.936 9.28a5.88 5.88 0 0 0-1.23-.247A7.35 7.35 0 0 0 5 9c-4 0-5 3-5 4 0 .667.333 1 1 1h4.216A2.238 2.238 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816zM4.92 10A5.493 5.493 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275zM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0zm3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                        Сотрудники — База данных сотрудников
+                    </h6>
+                    <p>Раздел для управления списком сотрудников организации:</p>
+                    <ul class="mb-0">
+                        <li><strong>Просмотр</strong> — полный список с фильтрацией по компании и подразделению</li>
+                        <li><strong>Добавление</strong> — ручной ввод данных о сотруднике</li>
+                        <li><strong>Редактирование</strong> — изменение информации о сотруднике</li>
+                        <li><strong>Удаление</strong> — удаление сотрудника из базы</li>
+                    </ul>
+                </div>
+
+                <div class="help-section mt-4">
+                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-envelope me-2" viewBox="0 0 16 16">
+                            <path d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4Zm2-1a1 1 0 0 0-1 1v.217l7 4.2 7-4.2V4a1 1 0 0 0-1-1H2Zm13 2.383-4.708 2.825L15 11.105V5.383Zm-.034 6.876-5.64-3.471L8 9.583l-1.326-.795-5.64 3.47A1 1 0 0 0 2 13h12a1 1 0 0 0 .966-.741ZM1 11.105l4.708-2.897L1 5.383v5.722Z"/>
+                        </svg>
+                        Получатели — Управление рассылкой
+                    </h6>
+                    <p>Настройка адресатов для email-уведомлений о днях рождения:</p>
+                    <ul class="mb-0">
+                        <li><strong>Добавление</strong> — указание имени и email получателя</li>
+                        <li><strong>Активация/Деактивация</strong> — включение или отключение получателя из рассылки</li>
+                        <li><strong>Редактирование</strong> — изменение данных получателя</li>
+                    </ul>
+                </div>
+
+                <div class="help-section mt-4">
+                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-file-earmark-excel me-2" viewBox="0 0 16 16">
+                            <path d="M5.887 7h.566c.342 0 .618-.276.618-.618V5.618A.618.618 0 0 0 6.453 5H5.887a.618.618 0 0 0-.618.618v.764c0 .342.276.618.618.618zm3.66 0h.566c.342 0 .618-.276.618-.618V5.618A.618.618 0 0 0 10.113 5h-.566a.618.618 0 0 0-.618.618v.764c0 .342.276.618.618.618zm-3.66 3h.566c.342 0 .618-.276.618-.618v-.764A.618.618 0 0 0 6.453 8H5.887a.618.618 0 0 0-.618.618v.764c0 .342.276.618.618.618zm3.66 0h.566c.342 0 .618-.276.618-.618v-.764A.618.618 0 0 0 10.113 8h-.566a.618.618 0 0 0-.618.618v.764c0 .342.276.618.618.618z"/>
+                            <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
+                        </svg>
+                        Импорт — Загрузка из Excel
+                    </h6>
+                    <p>Массовый импорт сотрудников из файла Excel:</p>
+                    <ul class="mb-0">
+                        <li><strong>Шаблон</strong> — скачайте шаблон для заполнения</li>
+                        <li><strong>Формат</strong> — файлы .xlsx с колонками: Компания, ФИО, Должность, Подразделение, Дата рождения, Примечания</li>
+                        <li><strong>Дубликаты</strong> — при совпадении данных запись обновляется</li>
+                    </ul>
+                </div>
+
+                <div class="help-section mt-4">
+                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-bell me-2" viewBox="0 0 16 16">
+                            <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
+                        </svg>
+                        Автоматические уведомления
+                    </h6>
+                    <p>Система автоматически отправляет email-уведомления:</p>
+                    <ul class="mb-0">
+                        <li><strong>Ежедневно</strong> — уведомления о днях рождения сегодня (утром)</li>
+                        <li><strong>Ежемесячно</strong> — список именинников следующего месяца (25-го числа)</li>
+                    </ul>
+                </div>
+
+                <hr class="my-4">
+
+                <div class="text-center text-muted small">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-code me-1" viewBox="0 0 16 16">
+                        <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
+                        <path fill-rule="evenodd" d="M15.854 5.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L12.5 7.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    </svg>
+                    Разработчик: <strong>Казанцев Александр Сергеевич</strong>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endif %}
-<main class="container-fluid py-4">
+<main class="container-fluid py-4 flex-grow-1">
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
             <div class="flash-wrap">
@@ -45,6 +163,16 @@
     {% endwith %}
     {% block content %}{% endblock %}
 </main>
+
+<footer class="footer mt-auto py-3 bg-light border-top">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <span class="text-muted small">&copy; Birthday Reminder</span>
+            <a href="{{ url_for('static', filename='privacy.html') }}" class="text-muted small text-decoration-none">Политика конфиденциальности</a>
+        </div>
+    </div>
+</footer>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
