@@ -6,7 +6,7 @@ from flask import Flask
 from werkzeug.security import generate_password_hash
 
 from app.config import Config
-from app.extensions import csrf, db, login_manager, migrate
+from app.extensions import csrf, db, login_manager
 from app.logging_config import configure_logging
 from controllers.auth_controller import auth_bp
 from controllers.dashboard_controller import dashboard_bp
@@ -24,7 +24,6 @@ def create_app(config_class: type[Config] = Config) -> Flask:
 
     configure_logging(app)
     db.init_app(app)
-    migrate.init_app(app, db)
     csrf.init_app(app)
     login_manager.init_app(app)
 
