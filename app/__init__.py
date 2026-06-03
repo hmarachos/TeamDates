@@ -28,6 +28,9 @@ def create_app(config_class: type[Config] = Config) -> Flask:
     csrf.init_app(app)
     login_manager.init_app(app)
 
+    with app.app_context():
+        db.create_all()
+
     register_blueprints(app)
     register_cli(app)
 
