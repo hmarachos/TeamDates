@@ -4,6 +4,8 @@ services:
     container_name: birthday-reminder
     env_file:
       - .env
+    environment:
+      - TZ=Europe/Minsk
     ports:
       - "5000:5000"
     volumes:
